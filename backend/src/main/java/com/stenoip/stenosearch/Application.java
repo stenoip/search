@@ -12,6 +12,5 @@ public class Application {
         // Proceed with the next steps
         System.out.println("Initializing components...");
         System.out.println("Starting Web Crawler...");
-        // Future calls for crawler, indexing, and search
     }
 }
