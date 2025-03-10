@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StenoSearch</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 244, 229); /* Warm, fiery backdrop */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Header Section */
+        header {
+            width: 100%;
+            background-color: rgb(255, 87, 51); /* Fiery orange-red */
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            color: rgb(255, 255, 255); /* White text for contrast */
+            font-size: 36px;
+            letter-spacing: 2px;
+        }
+
+        /* Search Section */
+        #search-section {
+            width: 100%;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Search input styling */
+        #search-bar {
+            width: 50%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid rgb(255, 130, 75);
+            border-radius: 10px;
+            margin-right: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #search-bar:focus {
+            outline: none;
+            border-color: rgb(255, 69, 0); /* Fiery red-orange focus */
+        }
+
+        /* Search button styling */
+        #search-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: rgb(255, 255, 255);
+            background-color: rgb(255, 69, 0); /* Fiery red-orange */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        #search-button:hover {
+            background-color: rgb(255, 87, 51); /* Lighter fiery tone */
+        }
+
+        /* Results Section */
+        #results-section {
+            width: 100%;
+            background-color: rgb(255, 244, 229); /* Same backdrop */
+            padding: 30px 20px;
+        }
+
+        #results {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .result-item {
+            background-color: rgb(255, 255, 255); /* White card */
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid rgb(255, 130, 75); /* Fiery orange border */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Result title styling */
+        .result-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: rgb(255, 87, 51);
+            text-decoration: none;
+        }
+
+        .result-title:hover {
+            color: rgb(255, 69, 0);
+            text-decoration: underline;
+        }
+
+        /* Result snippet styling */
+        .result-snippet {
+            color: rgb(100, 100, 100);
+            margin-top: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Footer Section */
+        footer {
+            width: 100%;
+            background-color: rgb(255, 87, 51);
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        footer p {
+            color: rgb(255, 255, 255);
+            font-size: 14px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1>StenoSearch</h1>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search-section">
+        <div id="search-container">
+            <input type="text" id="search-bar" placeholder="Search for information...">
+            <button id="search-button">Search</button>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section">
+        <div id="results"></div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Stenoip Company. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for handling the search functionality
+        document.getElementById('search-button').addEventListener('click', async () => {
+            const query = document.getElementById('search-bar').value.trim();
+            const resultsContainer = document.getElementById('results');
+
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+
+            if (query) {
+                try {
+                    // Simulate fetching results from the backend
+                    const response = await fetch(`http://localhost:9200/stenosearch/_search?q=${query}`);
+                    const data = await response.json();
+
+                    // Parse and display results
+                    const hits = data.hits.hits;
+                    if (hits.length > 0) {
+                        hits.forEach(hit => {
+                            const resultItem = document.createElement('div');
+                            resultItem.classList.add('result-item');
+
+                            const resultTitle = document.createElement('a');
+                            resultTitle.classList.add('result-title');
+                            resultTitle.href = hit._source.url;
+                            resultTitle.target = "_blank";
+                            resultTitle.textContent = hit._source.title;
+
+                            const resultSnippet = document.createElement('p');
+                            resultSnippet.classList.add('result-snippet');
+                            resultSnippet.textContent = hit._source.content.slice(0, 150) + '...';
+
+                            resultItem.appendChild(resultTitle);
+                            resultItem.appendChild(resultSnippet);
+                            resultsContainer.appendChild(resultItem);
+                        });
+                    } else {
+                        resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching search results:', error);
+                    resultsContainer.innerHTML = `<p>Something went wrong. Please try again later.</p>`;
+                }
+            } else {
+                alert('Please enter a search term.');
+            }
+        });
+    </script>
+</body>
+</html>
