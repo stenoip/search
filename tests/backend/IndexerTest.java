@@ -1,35 +1,30 @@
 package com.stenoip.stenosearch.index;
 
-import org.elasticsearch.client.RestClient;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 
-public class IndexerTest {
-    public static void main(String[] args) {
-        try (RestHighLevelClient client = new RestHighLevelClient(RestClient.builder(
-                new HttpHost("localhost", 9200, "http")))) {
-            
-            Indexer indexer = new Indexer(client);
-            
-            // Example document to index
-            Map<String, Object> document = new HashMap<>();
-            document.put("url", "https://example.com");
-            document.put("title", "Example Page");
-            document.put("content", "This is a sample document for StenoSearch.");
-            document.put("metadata", Map.of(
-                "keywords", "example, test, sample",
-                "author", "Stenoip",
-                "date", "2025-03-10"
-            ));
-            document.put("crawl_status", "crawled");
-            document.put("last_crawled", "2025-03-10");
+public class Indexer {
+    private RestHighLevelClient client;
 
-            // Index the document
-            indexer.createIndex("stenosearch", document);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public Indexer(RestHighLevelClient client) {
+        this.client = client;
+    }
+
+    public void createIndex(String indexName, Map<String, Object> document) {
+        try {
+            IndexRequest request = new IndexRequest(indexName);
+            request.source(document, XContentType.JSON);
+
+            IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+            System.out.println("Indexed document ID: " + response.getId());
+        } catch (IOException e) {
+            System.err.println("Error indexing document: " + e.getMessage());
         }
     }
 }
