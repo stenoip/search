@@ -8,28 +8,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WebCrawler {
-    private static final int MAX_DEPTH = 2; // Maximum depth for crawling
-    private Set<String> visitedUrls = new HashSet<>(); // Track visited URLs
+    private static final int MAX_DEPTH = 2;
+    private Set<String> visitedUrls = new HashSet<>();
 
     public void crawl(String url, int depth) {
         if (depth > MAX_DEPTH || visitedUrls.contains(url)) {
-            return; // Stop recursion if max depth reached or URL already visited
+            return;
         }
 
         try {
-            // Mark the URL as visited
             visitedUrls.add(url);
-
-            // Fetch and parse the page
             Document document = Jsoup.connect(url).get();
             System.out.println("Crawling URL: " + url);
             System.out.println("Page Title: " + document.title());
 
-            // Extract and process links
             for (Element link : document.select("a[href]")) {
-                String nextUrl = link.absUrl("href"); // Get absolute URL
+                String nextUrl = link.absUrl("href");
                 if (!visitedUrls.contains(nextUrl) && nextUrl.startsWith("http")) {
-                    crawl(nextUrl, depth + 1); // Recursively crawl the next URL
+                    crawl(nextUrl, depth + 1);
                 }
             }
         } catch (IOException e) {
