@@ -12,9 +12,10 @@ StenoSearch/
 │   │   │   │               ├── index/              # Indexing logic
 │   │   │   │               │   └── Indexer.java
 │   │   │   │               ├── search/             # Search and ranking logic
-│   │   │   │               │   └── SearchEngine.java
+│   │   │   │               │   ├── SearchEngine.java
+│   │   │   │               │   └── SearchEngineTest.java # Unit test for SearchEngine
 │   │   │   │               ├── utils/              # Utility classes
-│   │   │   │               │   └── Scope.java      # Defines scope and purpose
+│   │   │   │               │   └── Scope.java
 │   │   │   │               └── Application.java    # Main entry point
 │   │   └── resources/
 │   │       └── application.properties              # App configuration
@@ -33,8 +34,9 @@ StenoSearch/
 │   └── README.md                                    # Project documentation
 └── tests/
     ├── backend/
-    │   ├── CrawlerTest.java
-    │   └── IndexerTest.java
+    │   ├── CrawlerTest.java                         # Unit test for crawler
+    │   ├── IndexerTest.java                         # Unit test for indexing
+    │   └── additional-tests.java                    # Placeholder for other backend tests
     └── frontend/
-        ├── ui-tests.js
-        └── integration-tests.js
+        ├── ui-tests.js                              # UI tests for frontend
+        └── integration-tests.js                     # Integration tests for frontend-backend
