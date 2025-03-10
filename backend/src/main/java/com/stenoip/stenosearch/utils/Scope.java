@@ -1,4 +1,4 @@
-package com.stenoip.stenosearch;
+package com.stenoip.stenosearch.utils;
 
 public class Scope {
     private String type;
