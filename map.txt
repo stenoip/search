@@ -13,6 +13,8 @@ StenoSearch/
 │   │   │   │               │   └── Indexer.java
 │   │   │   │               ├── search/             # Search and ranking logic
 │   │   │   │               │   └── SearchEngine.java
+│   │   │   │               ├── utils/              # Utility classes
+│   │   │   │               │   └── Scope.java      # Defines scope and purpose
 │   │   │   │               └── Application.java    # Main entry point
 │   │   └── resources/
 │   │       └── application.properties              # App configuration
