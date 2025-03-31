@@ -20,10 +20,10 @@ StenoSearch/
 │   │   └── resources/
 │   │       └── application.properties              # App configuration
 │   └── pom.xml                                      # Maven configuration
-├── frontend/
-│   ├── index.html                                   # HTML, CSS, JS (single file)
-│   ├── scripts.js                                   # Additional frontend logic
-│   └── styles.css                                   # Custom styles if needed
+├── frontend(not a folder)/
+│   ├── index.html                                   
+│                                   
+│                                  
 ├── database/
 │   ├── schema/                                      # Database schema files
 │   │   └── elasticsearch-schema.json
