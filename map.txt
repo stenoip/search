@@ -1,42 +1,8 @@
-StenoSearch/
-├── backend/
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── com/
-│   │   │   │       └── stenoip/
-│   │   │   │           └── stenosearch/
-│   │   │   │               ├── crawler/            # Web crawler logic
-│   │   │   │               │   ├── WebCrawler.java
-│   │   │   │               │   └── RobotsTxt.java
-│   │   │   │               ├── index/              # Indexing logic
-│   │   │   │               │   └── Indexer.java
-│   │   │   │               ├── search/             # Search and ranking logic
-│   │   │   │               │   ├── SearchEngine.java
-│   │   │   │               │   └── SearchEngineTest.java # Unit test for SearchEngine
-│   │   │   │               ├── utils/              # Utility classes
-│   │   │   │               │   └── Scope.java
-│   │   │   │               └── Application.java    # Main entry point
-│   │   └── resources/
-│   │       └── application.properties              # App configuration
-│   └── pom.xml                                      # Maven configuration
-├── frontend(not a folder)/
-│   ├── index.html                                   
-│                                   
-│                                  
-├── database/
-│   ├── schema/                                      # Database schema files
-│   │   └── elasticsearch-schema.json
-│   └── scripts/                                     # Scripts for seeding and indexing
-│       └── seed-index.sh
-├── docs/
-│   ├── architecture-diagram.png                     # Architectural overview
-│   └── README.md                                    # Project documentation
-└── tests/
-    ├── backend/
-    │   ├── CrawlerTest.java                         # Unit test for crawler
-    │   ├── IndexerTest.java                         # Unit test for indexing
-    │   └── additional-tests.java                    # Placeholder for other backend tests
-    └── frontend/
-        ├── ui-tests.js                              # UI tests for frontend
-        └── integration-tests.js                     # Integration tests for frontend-backend
+stenosearch-backend/
+├── data/
+│   ├── doc1.txt
+│   ├── doc2.txt
+├── indexer.py
+├── search.py
+├── server.py
+└── index.json  <-- Generated inverted index
