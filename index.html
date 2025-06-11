@@ -2,230 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="swc.png" type="image/png">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    
     <title>StenoSearch</title>
+
     <style>
-        /* General body styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: rgb(255, 244, 229); /* Warm, fiery backdrop */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-        }
-
-        /* Header Section */
-        header {
-            width: 100%;
-            background-color: rgb(255, 87, 51); /* Fiery orange-red */
-            padding: 20px 0;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: #f4f4f4;
         }
-
-        header h1 {
-            color: rgb(255, 255, 255); /* White text for contrast */
-            font-size: 36px;
-            letter-spacing: 2px;
+        form {
+            margin-bottom: 20px;
         }
-
-        /* Search Section */
-        #search-section {
-            width: 100%;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #search-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        /* Search input styling */
-        #search-bar {
-            width: 50%;
-            padding: 15px;
-            font-size: 18px;
-            border: 2px solid rgb(255, 130, 75);
-            border-radius: 10px;
-            margin-right: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        #search-bar:focus {
-            outline: none;
-            border-color: rgb(255, 69, 0); /* Fiery red-orange focus */
-        }
-
-        /* Search button styling */
-        #search-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            color: rgb(255, 255, 255);
-            background-color: rgb(255, 69, 0); /* Fiery red-orange */
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-
-        #search-button:hover {
-            background-color: rgb(255, 87, 51); /* Lighter fiery tone */
-        }
-
-        /* Results Section */
-        #results-section {
-            width: 100%;
-            background-color: rgb(255, 244, 229); /* Same backdrop */
-            padding: 30px 20px;
-        }
-
-        #results {
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        .result-item {
-            background-color: rgb(255, 255, 255); /* White card */
-            margin: 20px 0;
-            padding: 20px;
-            border: 2px solid rgb(255, 130, 75); /* Fiery orange border */
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Result title styling */
-        .result-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: rgb(255, 87, 51);
-            text-decoration: none;
-        }
-
-        .result-title:hover {
-            color: rgb(255, 69, 0);
-            text-decoration: underline;
-        }
-
-        /* Result snippet styling */
-        .result-snippet {
-            color: rgb(100, 100, 100);
+        #results, #history {
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
             margin-top: 10px;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* Footer Section */
-        footer {
-            width: 100%;
-            background-color: rgb(255, 87, 51);
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        footer p {
-            color: rgb(255, 255, 255);
-            font-size: 14px;
-            margin: 0;
         }
     </style>
+    
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <h1>StenoSearch</h1>
-    </header>
+    <h2>StenoSearch</h2>
 
-    <!-- Search Section -->
-    <section id="search-section">
-        <div id="search-container">
-            <input type="text" id="search-bar" placeholder="Search for information...">
-            <button id="search-button">Search</button>
-        </div>
-    </section>
+    <!-- User Input Form -->
+    <form id="search-form">
+        <input type="text" id="query" placeholder="Enter search term...">
+        <button type="button" id="search-btn">Search</button>
+    </form>
 
-    <!-- Results Section -->
-    <section id="results-section">
-        <div id="results"></div>
-    </section>
+    <!-- Search History -->
+    <div id="history"></div>
 
-    <!-- Footer Section -->
-    <footer>
-        <p>© 2025 Stenoip Company. All rights reserved.</p>
-    </footer>
+    <!-- Search Results -->
+    <div id="results"></div>
 
-<script>
-    document.getElementById('search-button').addEventListener('click', async () => {
-        const query = document.getElementById('search-bar').value.trim();
-        const resultsContainer = document.getElementById('results');
+    <script>
+        $(document).ready(function() {
+            loadSearchHistory();
 
-        // Clear previous results
-        resultsContainer.innerHTML = '';
-
-        if (query) {
-            console.log(`Searching for: ${query}`);  // Log the search query
-            try {
-                // Fetch results from backend
-                const response = await fetch(`https://clumsy-encouraging-skunk.glitch.me/search?q=${query}`);
-                console.log(`Response status: ${response.status}`);  // Log the response status
-
-                if (!response.ok) {
-                    console.error(`Failed to fetch results: ${response.statusText}`);
-                    resultsContainer.innerHTML = `<p>Error fetching results. Please try again later.</p>`;
+            $("#search-btn").click(function() {
+                let query = $("#query").val().trim();
+                if (query === "") {
+                    $("#results").html("<p>Please enter a search term.</p>");
                     return;
                 }
 
-                const data = await response.json();
-                console.log('Data received:', data);  // Log the data received
+                let encodedQuery = encodeURIComponent(query);
+                let url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodedQuery}&utf8=&format=json&origin=*`;
 
-                // Parse and display results
-                const hits = data;
-                if (hits.length > 0) {
-                    hits.forEach(hit => {
-                        const resultItem = document.createElement('div');
-                        resultItem.classList.add('result-item');
-
-                        const resultTitle = document.createElement('a');
-                        resultTitle.classList.add('result-title');
-                        resultTitle.href = hit.url;
-                        resultTitle.target = "_blank";
-                        resultTitle.textContent = hit.title;
-
-                        const resultSnippet = document.createElement('p');
-                        resultSnippet.classList.add('result-snippet');
-                        resultSnippet.textContent = hit.snippet;
-
-                        resultItem.appendChild(resultTitle);
-                        resultItem.appendChild(resultSnippet);
-                        resultsContainer.appendChild(resultItem);
-                    });
+                // Check local cache
+                let cacheKey = `wiki_${query}`;
+                let cachedData = localStorage.getItem(cacheKey);
+                
+                if (cachedData) {
+                    $("#results").html(cachedData);
                 } else {
-                    resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
-                }
-            } catch (error) {
-                console.error('Error fetching search results:', error);
-                resultsContainer.innerHTML = `<p>Something went wrong. Please try again later.</p>`;
-            }
-        } else {
-            alert('Please enter a search term.');
-        }
-    });
-</script>
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.query && response.query.search) {
+                                let resultsHtml = "<h3>Search Results:</h3><ul>";
+                                response.query.search.slice(0, 10).forEach(item => {
+                                    let title = item.title;
+                                    let snippet = item.snippet;
+                                    let link = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+                                    resultsHtml += `<li><a href="${link}" target="_blank">${title}</a><br>${snippet}...</li>`;
+                                });
+                                resultsHtml += "</ul>";
 
+                                $("#results").html(resultsHtml);
+                                localStorage.setItem(cacheKey, resultsHtml);
+                                saveSearch(query);
+                            } else {
+                                $("#results").html("<p>No results found.</p>");
+                            }
+                        },
+                        error: function(err) {
+                            $("#results").html("<p>Error fetching results.</p>");
+                        }
+                    });
+                }
+            });
+
+            function saveSearch(query) {
+                let searches = JSON.parse(localStorage.getItem("search_history") || "[]");
+                if (!searches.includes(query)) {
+                    searches.push(query);
+                    localStorage.setItem("search_history", JSON.stringify(searches));
+                }
+                loadSearchHistory();
+            }
+
+            function loadSearchHistory() {
+                let searches = JSON.parse(localStorage.getItem("search_history") || "[]");
+                let historyHtml = "<h4>📜 Search History:</h4>";
+                searches.forEach(s => historyHtml += `<p>${s}</p>`);
+                $("#history").html(historyHtml);
+            }
+        });
+    </script>
 
 </body>
 </html>
