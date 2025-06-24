@@ -1,113 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    
-    <title>StenoSearch</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        #results, #history {
-            background: #ffffff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-    </style>
-    
-    <!-- jQuery Library -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <h2>StenoSearch</h2>
-
-    <!-- User Input Form -->
-    <form id="search-form">
-        <input type="text" id="query" placeholder="Enter search term...">
-        <button type="button" id="search-btn">Search</button>
-    </form>
-
-    <!-- Search History -->
-    <div id="history"></div>
-
-    <!-- Search Results -->
-    <div id="results"></div>
-
-    <script>
-        $(document).ready(function() {
-            loadSearchHistory();
-
-            $("#search-btn").click(function() {
-                let query = $("#query").val().trim();
-                if (query === "") {
-                    $("#results").html("<p>Please enter a search term.</p>");
-                    return;
-                }
-
-                let encodedQuery = encodeURIComponent(query);
-                let url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodedQuery}&utf8=&format=json&origin=*`;
-
-                // Check local cache
-                let cacheKey = `wiki_${query}`;
-                let cachedData = localStorage.getItem(cacheKey);
-                
-                if (cachedData) {
-                    $("#results").html(cachedData);
-                } else {
-                    $.ajax({
-                        url: url,
-                        method: "GET",
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.query && response.query.search) {
-                                let resultsHtml = "<h3>Search Results:</h3><ul>";
-                                response.query.search.slice(0, 10).forEach(item => {
-                                    let title = item.title;
-                                    let snippet = item.snippet;
-                                    let link = `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
-                                    resultsHtml += `<li><a href="${link}" target="_blank">${title}</a><br>${snippet}...</li>`;
-                                });
-                                resultsHtml += "</ul>";
-
-                                $("#results").html(resultsHtml);
-                                localStorage.setItem(cacheKey, resultsHtml);
-                                saveSearch(query);
-                            } else {
-                                $("#results").html("<p>No results found.</p>");
-                            }
-                        },
-                        error: function(err) {
-                            $("#results").html("<p>Error fetching results.</p>");
-                        }
-                    });
-                }
-            });
-
-            function saveSearch(query) {
-                let searches = JSON.parse(localStorage.getItem("search_history") || "[]");
-                if (!searches.includes(query)) {
-                    searches.push(query);
-                    localStorage.setItem("search_history", JSON.stringify(searches));
-                }
-                loadSearchHistory();
-            }
-
-            function loadSearchHistory() {
-                let searches = JSON.parse(localStorage.getItem("search_history") || "[]");
-                let historyHtml = "<h4>📜 Search History:</h4>";
-                searches.forEach(s => historyHtml += `<p>${s}</p>`);
-                $("#history").html(historyHtml);
-            }
-        });
-    </script>
-
-</body>
+<html>
+  <head>
+    <title>Page Moved</title>
+    <meta http-equiv="refresh" content="5; url=https://steno-search.glitch.me/" />
+  </head>
+  <body>
+    <h1>This URL has been moved</h1>
+    <p>StenoSearch has been replaced with the all new Oodles!&#8482;</p>
+    <p>You will be redirected in 5 seconds. If not, click <a href="https://steno-search.glitch.me/">here</a>.</p>
+  </body>
 </html>
